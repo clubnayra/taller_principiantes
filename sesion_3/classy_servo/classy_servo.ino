@@ -81,7 +81,7 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
-  myservo.move(180, 60);
+  myservo.move(180, 120);
   delay(500);
   myservo.move(0, 60);
   delay(500);
