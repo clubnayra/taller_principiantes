@@ -17,7 +17,7 @@ void loop() {
   tiempo_actual = millis();
   if (tiempo_actual - ultimo_cambio >= medio_periodo) {
     estado_led = !estado_led;
-    digitalWrite(estado_led);
+    digitalWrite(led, estado_led);
     ultimo_cambio = tiempo_actual;
   }
 }
