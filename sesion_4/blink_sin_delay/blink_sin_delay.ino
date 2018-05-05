@@ -1,7 +1,7 @@
 uint8_t led = 13;
 
 uint8_t estado_led = LOW;
-uint8_t medio_periodo = 250;
+uint8_t medio_periodo = 250; // periodo en ms
 uint32_t ultimo_cambio;
 uint32_t tiempo_actual;
 
