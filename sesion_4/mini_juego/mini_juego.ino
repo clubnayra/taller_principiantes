@@ -40,7 +40,7 @@ void loop() {
     if(estado_actual == LOW && estado_anterior == HIGH) { // pulsador presionado
       contador++;
       estado_anterior = estado_actual;
-      delay(10);  // para evitar ecturas de rebote
+      delay(10);  // para evitar lecturas de rebote
     }
     else if(estado_actual == HIGH && estado_anterior == LOW) { // pulsador suelto
       estado_anterior = estado_actual;
