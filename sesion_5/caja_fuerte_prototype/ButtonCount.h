@@ -1,15 +1,6 @@
 #include <FSME.h>
 
-uint8_t get_pulses_0() {
-  return counter;
-}
-
-uint8_t get_pulses_1() {
-  return counter2;
-}
-
 uint8_t pulsador = 2;
-
 uint8_t counter = 0;
 
 enum {
@@ -112,5 +103,21 @@ void pulsador1_setup() {
 
   pulsos_1.setStates(states2, 5);
   pulsos_1.setInitialState(idle);
+}
+
+uint8_t get_pulses_0() {
+  return counter;
+}
+
+uint8_t get_pulses_1() {
+  return counter2;
+}
+
+void clear_pulses_0() {
+  counter = 0;
+}
+
+void clear_pulses_1() {
+  counter2 = 0;
 }
 
