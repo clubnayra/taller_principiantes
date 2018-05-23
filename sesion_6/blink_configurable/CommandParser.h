@@ -1,3 +1,6 @@
+#ifndef COMMAND_PARSER_H
+#define COMMAND_PARSER_H
+
 class CommandParser {
   private:
     #define MAX_CMD_SIZE 30
@@ -13,7 +16,7 @@ class CommandParser {
     #define MAX_ARGS 3
     String argumentos[MAX_ARGS];
 
-    #define MAX_COMMANDS 10
+    #define MAX_COMMANDS 5
     struct {
       String command;
       void (*action)(String *args);
@@ -36,20 +39,25 @@ class CommandParser {
 
   public:
     CommandParser() {
-      // cmd.reserve(MAX_CMD_SIZE);
+      cmd.reserve(MAX_CMD_SIZE);
       cmd = "";
       cmd_complete = 0;
-      // comando.reserve(MAX_COMANDO_SIZE);
+      comando.reserve(MAX_COMANDO_SIZE);
+      comando = "";
+      for (i = 0; i < MAX_ARGS; i++) {
+        argumentos[i].reserve((MAX_CMD_SIZE - MAX_COMANDO_SIZE) / MAX_ARGS);
+      }
       clearArgumentos();
+      for(i = 0; i < MAX_COMMANDS; i++) {
+        commands[i].command.reserve(MAX_COMANDO_SIZE);
+      }
       clearCommands();
       delimiter = ' ';
     }
 
-    void addCommand(char *str, void (*action)(String *args)) {
-      char stri[MAX_COMANDO_SIZE];
+    void addCommand(String str, void (*action)(String *args)) {
       if(commands_index < MAX_COMMANDS) {
-        strcpy(stri, str);
-        commands[commands_index].command = String(stri);
+        commands[commands_index].command = str;
         commands[commands_index].action = action;
         commands_index++;
       }
@@ -66,7 +74,9 @@ class CommandParser {
           // final de linea
           case '\r':
           case '\n':
-            cmd_complete = 1;
+            if (cmd != "") {
+              cmd_complete = 1;
+            }
             break;
           // añadimos caracteres
           default:
@@ -82,7 +92,6 @@ class CommandParser {
           index = cmd.indexOf(delimiter); // usamos el espacio como delimitador
           if(index > 0) { // si se encuentra el delimitador index > 0
             comando = cmd.substring(0, index);
-            comando.trim();
     
             // argumentos
             i = 0;
@@ -91,7 +100,6 @@ class CommandParser {
               index = cmd.indexOf(delimiter, last_index);
               if(index > 0) {
                 argumentos[i] = cmd.substring(last_index, index);
-                argumentos[i].trim();
                 i++;
               }
               else {
@@ -107,9 +115,12 @@ class CommandParser {
           }
           
           cmd = "";
+          comando = "";
           clearArgumentos();
         }
       }
     }
 };
+
+#endif
 
