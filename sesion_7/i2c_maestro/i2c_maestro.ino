@@ -6,7 +6,7 @@
 // variables en las que se guardaran los valores leidos
 uint16_t pot1;  // valor del potenciometro 1
 uint16_t pot2;  // valor del potenciometro 2
-uint8_t aux;    // numero de bytes recividos
+uint8_t aux, i;    // numero de bytes recividos
 
 // tipos de errores que reconoce la libreria Wire
 enum error_enum {
@@ -44,27 +44,30 @@ void setup() {
 void loop() {
   // put your main code here, to run repeatedly:
 
+  for (i = 9; i < 12; i++) {
   // comenzamos la transaccion de lectura del potenciometro 1
-  Serial.println("solicitando potenciometro 1...");
+  Serial.print("solicitando potenciometro ");
+  Serial.println(i);
   // antes de recivir datos debemos apuntar al registro que queremos leer
   // esto se hace escribiendo solo un byte, con la direccion del registro que queremos leer
-  Wire.beginTransmission(SLA_ADDRESS);  // iniciamos la transmision al esclavo (escritura)
-  Wire.write((uint8_t)POT1_H);          // apuntamos al primer byte del potenciometro 1
+  Wire.beginTransmission(i);  // iniciamos la transmision al esclavo (escritura)
+  Wire.write((uint8_t)POT2_H);          // apuntamos al primer byte del potenciometro 1
   error = Wire.endTransmission();       // terminamos la transmision
 
   // leemos solo si la transmision fue exitosa
   switch (error) {
     case SUCCESS:
       Serial.println("solicitando lectura, 2 bytes...");
-      aux = Wire.requestFrom(SLA_ADDRESS, 2); // solicitamos una lecture de datos
+      aux = Wire.requestFrom(i, 2); // solicitamos una lecture de datos
                                               // mandamos nack despues de 2 bytes
       if (aux == 2) { // verificamos que la lectura fue exitosa
-        pot1 = Wire.read() * 256; // leemos el byte mas significativo
-        pot1 += Wire.read();      // leemos el byte menos significativo
+        pot2 = Wire.read() * 256; // leemos el byte mas significativo
+        pot2 += Wire.read();      // leemos el byte menos significativo
         Serial.print("leido: ");
-        Serial.println(pot1);
+        Serial.println(pot2);
       }
       else {
+        Serial.println(aux);
         Serial.println("error al solicitar lectura...");
       }
       break;
@@ -73,7 +76,7 @@ void loop() {
       break;
     case N_ADDRESS:
       Serial.print("ningun esclavo con la direccion ");
-      Serial.println(SLA_ADDRESS);
+      Serial.println(i);
       break;
     case N_DATA:
       Serial.println("fallo al transmitir los datos, nack");
@@ -82,6 +85,8 @@ void loop() {
       Serial.println("fallo al transmitir, error desconocido...");
       break;
   }
-
+  Serial.println("");
+  }
+  Serial.println("");
   delay(1000);
 }
